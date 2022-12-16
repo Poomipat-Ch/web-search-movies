@@ -1,4 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { ElasticService } from './elastic/elastic.service';
 
@@ -15,7 +22,23 @@ export class AppController {
   }
 
   @Get('/movies')
-  searchMovies() {
-    return this.elasticService.searchMovie('');
+  searchMovies(@Query('q') query: string) {
+    if (!query) {
+      throw new HttpException('Query is empty!!!', HttpStatus.BAD_REQUEST);
+    }
+    return this.elasticService.searchMovie(query);
+  }
+
+  @Get('/movies/suggest')
+  searchSuggestion(@Query('q') query: string) {
+    if (!query) {
+      throw new HttpException('Query is empty!!!', HttpStatus.BAD_REQUEST);
+    }
+    return this.elasticService.suggestionSearch(query);
+  }
+
+  @Get('/movies/:id')
+  getMovie(@Param('id') movieId: string) {
+    return this.elasticService.getMovie(movieId);
   }
 }

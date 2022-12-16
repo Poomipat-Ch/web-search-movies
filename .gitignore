@@ -39,4 +39,4 @@ development.env
 production.env
 
 # Elastic data
-elastic-data
+elastic_data
