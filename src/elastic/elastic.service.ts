@@ -1,5 +1,6 @@
 import { Client } from '@elastic/elasticsearch';
 import { Injectable } from '@nestjs/common';
+import { MovieType } from 'src/models/movie.model';
 
 @Injectable()
 export class ElasticService {
@@ -14,7 +15,7 @@ export class ElasticService {
   }
 
   async suggestionSearch(query: string) {
-    return this.elasicClient.search({
+    return this.elasicClient.search<MovieType>({
       index: this.index,
       from: 0,
       size: 5,
@@ -28,7 +29,7 @@ export class ElasticService {
   }
 
   async searchMovie(query: string) {
-    return this.elasicClient.search({
+    return this.elasicClient.search<MovieType>({
       index: this.index,
       from: 0,
       size: 20,
@@ -42,7 +43,7 @@ export class ElasticService {
   }
 
   async getMovie(movieId: string) {
-    return this.elasicClient.get({
+    return this.elasicClient.get<MovieType>({
       index: this.index,
       id: movieId,
     });
